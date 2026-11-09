@@ -1,10 +1,11 @@
+
 #include <iostream>
 #include <iomanip>
 #include <cmath>
 
 using namespace std;
 
-void readArray(double a[], int n)
+void Input(double a[], int n) // введення масиву
 {
     for (int i = 0; i < n; i++)
     {
@@ -12,24 +13,23 @@ void readArray(double a[], int n)
     }
 }
 
-void printArray(const double a[], int n)
+void Print(const double a[], int n) // виведення масиву
 {
     for (int i = 0; i < n; i++)
     {
-        cout << setw(10) << fixed
-            << setprecision(2) << a[i];
+        cout << setw(10) << fixed << setprecision(2) << a[i];
     }
 
     cout << endl;
 }
 
-int maxAbsIndex(const double a[], int n)
+int Max(const double a[], int n) // пошук індексу максимального за модулем елемента
 {
     int index = 0;
 
     for (int i = 1; i < n; i++)
     {
-        if (fabs(a[i]) > fabs(a[index]))
+        if (abs(a[i]) > abs(a[index]))
         {
             index = i;
         }
@@ -38,27 +38,27 @@ int maxAbsIndex(const double a[], int n)
     return index;
 }
 
-double sumAfterPositive(const double a[], int n)
+double Sum(const double a[], int n) // сума елементів після першого додатного 
 {
-    int index = -1;
+    int index = -1; // спочатку додатного числа ще не знайшли
 
     for (int i = 0; i < n; i++)
     {
         if (a[i] > 0)
         {
             index = i;
-            break;
+            break; // потрібно лише перше додатньє
         }
     }
 
-    if (index == -1)
+    if (index == -1) // якщо додатного числа немає, повертаємо ноль
     {
         return 0;
     }
 
     double sum = 0;
 
-    for (int i = index + 1; i < n; i++)
+    for (int i = index + 1; i < n; i++) // index + 1, щоб не додавати саме перше додатне число
     {
         sum += a[i];
     }
@@ -66,37 +66,37 @@ double sumAfterPositive(const double a[], int n)
     return sum;
 }
 
-bool belongs(double x, int low, int high)
+bool Check(double x, int low, int high) // перевірка цілої частини числа на належність інтервалу
 {
-    int part = (int)x;
+    int c = (int)x; // x в ціле число
 
-    return part >= low && part <= high;
+    return c >= low && c <= high;
 }
 
-void rearrange(double a[], int n, int low, int high)
+void Change(double a[], int n, int low, int high) // переставляння елементів масиву
 {
-    double* b = new double[n];
+    double* b = new double[n]; // спочатку записать потрібний рядок в b , а потім в а
     int k = 0;
 
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < n; i++) // переносим числа які підходять
     {
-        if (belongs(a[i], low, high))
+        if (Check(a[i], low, high))
         {
             b[k] = a[i];
             k++;
         }
     }
 
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < n; i++) // переносим всі інші числа які не входять в інтервал
     {
-        if (!belongs(a[i], low, high))
+        if (!Check(a[i], low, high))
         {
             b[k] = a[i];
             k++;
         }
     }
 
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < n; i++) // копіруєм кожен ел. з  б в а
     {
         a[i] = b[i];
     }
@@ -128,21 +128,19 @@ int main()
     double* a = new double[n];
 
     cout << "Enter array elements:" << endl;
-    readArray(a, n);
+    Input(a, n);
 
     cout << "Original array:" << endl;
-    printArray(a, n);
+    Print(a, n);
 
-    cout << "Max abs index = "
-        << maxAbsIndex(a, n) << endl;
+    cout << "Max abs index = " << Max(a, n) << endl; // .
 
-    cout << "Sum after first positive = "
-        << sumAfterPositive(a, n) << endl;
+    cout << "Sum after first positive = " << Sum(a, n) << endl;
 
-    rearrange(a, n, low, high);
+    Change(a, n, low, high);
 
     cout << "Modified array:" << endl;
-    printArray(a, n);
+    Print(a, n);
 
     delete[] a;
 
